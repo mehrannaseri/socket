@@ -8,7 +8,10 @@ const REDIS = {
 };
 
 var http = require('http');
-
+var app = require('http').createServer();
+var io = require('socket.io')(app);
+var ioRedis = require('ioredis');
+var redis = new ioRedis(REDIS);
 http.createServer(function (req, res) {
 
     res.writeHead(200, {'Content-Type': 'application/json'});
@@ -17,14 +20,6 @@ http.createServer(function (req, res) {
     req.on('data', (chunk) => {
         let body = JSON.parse(chunk);
         if(url ==='/add') {
-            var app = require('http').createServer();
-            var io = require('socket.io')(app);
-            var ioRedis = require('ioredis');
-            var redis = new ioRedis(REDIS);
-            app.listen(SOCKET_PORT, function() {
-                console.log(new Date + ' - Server is running on port ' + SOCKET_PORT + ' and listening Redis on port ' + REDIS.port + '!');
-            });
-
             io.on('connection', function(socket) {
                 console.log('A client connected');
             });
@@ -41,5 +36,8 @@ http.createServer(function (req, res) {
     })
 }).listen(process.env.PORT, function() {
     console.log("server start at port "+process.env.PORT);
+    app.listen(SOCKET_PORT, function() {
+        console.log(new Date + ' - Server is running on port ' + SOCKET_PORT + ' and listening Redis on port ' + REDIS.port + '!');
+    });
 });
 
