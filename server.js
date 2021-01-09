@@ -11,7 +11,7 @@ var http = require('http');
 
 http.createServer(function (req, res) {
 
-    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.writeHead(200, {'Content-Type': 'application/json'});
 
     var url = req.url;
     req.on('data', (chunk) => {
@@ -36,8 +36,7 @@ http.createServer(function (req, res) {
                 console.log(data);
                 io.emit(channel , data);
             });
-            res.write(' Welcome to about us page');
-            res.end();
+            res.end(JSON.stringify({ code: 200, error:false, message: "topic added" }));
         }
     })
 }).listen(process.env.PORT, function() {
