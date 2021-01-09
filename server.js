@@ -14,7 +14,12 @@ var ioRedis = require('ioredis');
 var redis = new ioRedis(REDIS);
 http.createServer(function (req, res) {
 
-    res.writeHead(200, {'Content-Type': 'application/json'});
+    res.writeHead(200, {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,POST",
+        "Access-Control-Allow-Credentials": true
+    });
 
     var url = req.url;
     req.on('data', (chunk) => {
