@@ -17,7 +17,7 @@ http.createServer(function (req, res) {
     res.writeHead(200, {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE",
-        "Access-Control-Allow-Credentials": true,
+        "Access-Control-Allow-Credentials": false,
         "Content-Type": "application/json",
     });
 
