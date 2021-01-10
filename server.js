@@ -15,19 +15,16 @@ var redis = new ioRedis(REDIS);
 http.createServer(function (req, res) {
 
     res.writeHead(200, {
-        "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET,POST",
-        "Access-Control-Allow-Credentials": true
+        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE",
+        "Access-Control-Allow-Credentials": true,
+        "Content-Type": "application/json",
     });
 
     var url = req.url;
     req.on('data', (chunk) => {
         let body = JSON.parse(chunk);
         if(url ==='/add') {
-            io.on('connection', function(socket) {
-                console.log('A client connected');
-            });
 
             redis.psubscribe(body['topic'], function(err, count) {
                 console.log('Subscribed a');
@@ -38,7 +35,10 @@ http.createServer(function (req, res) {
             });
             res.end(JSON.stringify({ code: 200, error:false, message: "topic added" }));
         }
-    })
+    });
+    io.on('connection', function(socket) {
+        console.log('A client connected');
+    });
 }).listen(process.env.PORT, function() {
     console.log("server start at port "+process.env.PORT);
     app.listen(SOCKET_PORT, function() {
