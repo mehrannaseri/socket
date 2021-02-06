@@ -19,6 +19,9 @@ const http = require('http').Server(app);
 
 app.listen(process.env.PORT, function(){
     console.log("server is running on port "+process.env.PORT);
+    app.listen(SOCKET_PORT, function() {
+        console.log(new Date + ' - Server is running on port ' + SOCKET_PORT + ' and listening Redis on port ' + REDIS.port + '!');
+    });
 })
 var io = require('socket.io')(http, {
     cors: {
