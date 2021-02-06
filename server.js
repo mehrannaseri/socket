@@ -23,6 +23,16 @@ app.listen(process.env.PORT, function(){
         console.log(new Date + ' - Server is running on port ' + SOCKET_PORT + ' and listening Redis on port ' + REDIS.port + '!');
     });
 })
+
+/**
+ *
+ * add for localhost test http_socket
+ * , {
+    cors: {
+        origin: '*',
+    }
+}
+ */
 var io = require('socket.io')(http_socket);
 var ioRedis = require('ioredis');
 var redis = new ioRedis(REDIS);
