@@ -7,10 +7,6 @@ const REDIS = {
     "family": 4
 };
 const bodyParser = require("body-parser");
-var htp = require('http').createServer();
-var io = require('socket.io')(htp);
-var ioRedis = require('ioredis');
-var redis = new ioRedis(REDIS);
 const express = require("express");
 var cors = require('cors')
 const app = express();
@@ -18,6 +14,19 @@ app.use(cors())
 app.use(bodyParser.urlencoded({
     extended:true
 }));
+
+const http = require('http').Server(app);
+
+app.listen(process.env.PORT, function(){
+    console.log("server is running on port "+process.env.PORT);
+})
+var io = require('socket.io')(http, {
+    cors: {
+        origin: '*',
+    }
+});
+var ioRedis = require('ioredis');
+var redis = new ioRedis(REDIS);
 app.post("/add", function(req, res) {
 
     redis.psubscribe(req.body.topic, function(err, count) {
@@ -36,9 +45,7 @@ app.post("/add", function(req, res) {
     res.send(JSON.stringify({ code: 200, error:false, message: "topic added" }));
 });
 io.on('connection', function(socket) {
-        console.log('A client connected');
-    });
-app.listen(process.env.PORT, function(){
-    console.log("server is running on port "+process.env.PORT);
-})
+    console.log('A client connected');
+});
+
 

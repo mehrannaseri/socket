@@ -1,5 +1,5 @@
 {
-  "name": "chat",
+  "name": "transportation-socket",
   "version": "1.0.0",
   "description": "",
   "main": "node server.js",
