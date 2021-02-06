@@ -77,6 +77,3 @@ app.listen(process.env.PORT, function(){
 //         console.log(new Date + ' - Server is running on port ' + SOCKET_PORT + ' and listening Redis on port ' + REDIS.port + '!');
 //     });
 // });
-
-server start at port 3000
-Sat Feb 06 2021 14:04:32 GMT+0330 (Iran Standard Time) - Server is running on port 8081 and listening Redis on port 6379!

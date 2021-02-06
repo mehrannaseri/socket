@@ -15,15 +15,15 @@ app.use(bodyParser.urlencoded({
     extended:true
 }));
 
-const http = require('http').Server(app);
+var http_socket = require('http').createServer();
 
 app.listen(process.env.PORT, function(){
     console.log("server is running on port "+process.env.PORT);
-    app.listen(SOCKET_PORT, function() {
+    http_socket.listen(SOCKET_PORT, function() {
         console.log(new Date + ' - Server is running on port ' + SOCKET_PORT + ' and listening Redis on port ' + REDIS.port + '!');
     });
 })
-var io = require('socket.io')(http, {
+var io = require('socket.io')(http_socket, {
     cors: {
         origin: '*',
     }
@@ -36,7 +36,7 @@ app.post("/add", function(req, res) {
         console.log('Subscribed a');
     });
     redis.on('pmessage', function(subscribed, channel, data) {
-        console.log(data);
+        console.log('here', data);
         io.emit(channel , data);
     });
     res.set({
