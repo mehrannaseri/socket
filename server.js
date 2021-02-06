@@ -41,40 +41,4 @@ io.on('connection', function(socket) {
 app.listen(process.env.PORT, function(){
     console.log("server is running on port "+process.env.PORT);
 })
-// app.createServer(function (req, res) {
-//
-//     res.writeHead(200, {
-//         "Access-Control-Allow-Origin": "*",
-//         "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE",
-//         "Access-Control-Allow-Credentials": false,
-//         "Content-Type": "application/x-www-form-urlencoded",
-//     });
-//
-//     var url = req.url;
-//     var body = '';
-//     req.on('data', (chunk) => {
-//         body += chunk;
-//         let body = JSON.parse(chunk);
-//         if(url ==='/add') {
-//
-//             redis.psubscribe(body['topic'], function(err, count) {
-//                 console.log('Subscribed a');
-//             });
-//             redis.on('pmessage', function(subscribed, channel, data) {
-//                 console.log(data);
-//                 io.emit(channel , data);
-//             });
-//             res.end(JSON.stringify({ code: 200, error:false, message: "topic added" }));
-//         }
-//     });
-
-//     io.on('connection', function(socket) {
-//         console.log('A client connected');
-//     });
-// }).listen(process.env.PORT, function() {
-//     console.log("server start at port "+process.env.PORT);
-//     app.listen(SOCKET_PORT, function() {
-//         console.log(new Date + ' - Server is running on port ' + SOCKET_PORT + ' and listening Redis on port ' + REDIS.port + '!');
-//     });
-// });
 
