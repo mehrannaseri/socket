@@ -36,7 +36,7 @@ app.listen(process.env.PORT, function(){
 var io = require('socket.io')(http_socket);
 var ioRedis = require('ioredis');
 var redis = new ioRedis(REDIS);
-app.post("/add", cors(), function(req, res) {
+app.post("/add", function(req, res) {
 
     redis.psubscribe(req.body.topic, function(err, count) {
         console.log('Subscribed a');
@@ -48,7 +48,6 @@ app.post("/add", cors(), function(req, res) {
     res.set({
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE",
-        "Access-Control-Allow-Headers": "auth, authorization",
         "Access-Control-Allow-Credentials": false,
         "Content-Type": "application/json",
     })
