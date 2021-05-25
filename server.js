@@ -37,12 +37,12 @@ var io = require('socket.io')(http_socket);
 var ioRedis = require('ioredis');
 var redis = new ioRedis(REDIS);
 app.post("/add", function(req, res) {
-
     redis.psubscribe(req.body.topic, function(err, count) {
-        console.log('Subscribed a');
+        console.log('Subscribed a '+req.body.topic);
     });
+
     redis.on('pmessage', function(subscribed, channel, data) {
-        console.log('here', data);
+        console.log('data received on '+channel, data);
         io.emit(channel , data);
     });
     res.set({
