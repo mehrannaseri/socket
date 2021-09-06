@@ -31,7 +31,11 @@ app.listen(process.env.PORT, function(){
     }
 }
  */
-var io = require('socket.io')(http_socket);
+var io = require('socket.io')(http_socket, {
+    cors: {
+        origin: '*',
+    }
+});
 var ioRedis = require('ioredis');
 var redis = new ioRedis(REDIS);
 app.post("/add", function(req, res) {
