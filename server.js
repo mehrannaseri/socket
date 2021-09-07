@@ -13,40 +13,25 @@ const app = express();
 app.use(cors())
 app.use(bodyParser.json());
 
-var http_socket = require('http').createServer();
+// var http_socket = require('http').createServer();
+var socket_server = require("http").Server();
 
-app.listen(process.env.PORT, function(){
-    console.log("server is running on port "+process.env.PORT);
-    http_socket.listen(SOCKET_PORT, function() {
-        console.log(new Date + ' - Server is running on port ' + SOCKET_PORT + ' and listening Redis on port ' + REDIS.port + '!');
-    });
-})
-
-/**
- *
- * add for localhost test http_socket
- * , {
-    cors: {
-        origin: '*',
-    }
-}
- */
-var io = require('socket.io')(http_socket, {
+var io = require("socket.io")(socket_server,{
     cors: {
         origin: '*',
     }
 });
-var ioRedis = require('ioredis');
-var redis = new ioRedis(REDIS);
+
+var Redis = require("ioredis");
+
+var redis = new Redis();
+
 app.post("/add", function(req, res) {
-    redis.psubscribe(req.body.topic, function(err, count) {
-        console.log('Subscribed a '+req.body.topic);
+
+    redis.subscribe(req.body.topic, function(channel){
+        console.log("user subscribed", req.body.topic);
     });
 
-    redis.on('pmessage', function(subscribed, channel, data) {
-        console.log('data received on '+channel, data);
-        io.emit(channel , data);
-    });
     res.set({
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE",
@@ -57,10 +42,23 @@ app.post("/add", function(req, res) {
 });
 io.on('connection', function(socket) {
     console.log('A client connected', socket.id);
-
-
-    io.on("disconnect", () => console.log("Client disconnected"));
+    socket.on('disconnect', function () {
+        console.log('user disconnected', socket.id);
+        // redis.unsubscribe();
+    });
 });
+
+redis.on('message', function(channel, message){
+    console.log(channel, message);
+    io.emit(channel , message);
+});
+
+app.listen(process.env.PORT, function(){
+    console.log("server is running on port "+process.env.PORT);
+    socket_server.listen(SOCKET_PORT, function() {
+        console.log(new Date + ' - Server is running on port ' + SOCKET_PORT + ' and listening Redis on port ' + REDIS.port + '!');
+    });
+})
 
 
 
