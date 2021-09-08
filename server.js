@@ -28,7 +28,7 @@ var io = require("socket.io")(socket_server);
 
 var Redis = require("ioredis");
 
-var redis = new Redis();
+var redis = new Redis(REDIS.port, REDIS.host);
 
 app.post("/add", function(req, res) {
 
