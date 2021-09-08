@@ -16,11 +16,15 @@ app.use(bodyParser.json());
 // var http_socket = require('http').createServer();
 var socket_server = require("http").Server();
 
-var io = require("socket.io")(socket_server,{
+/**
+ * add this for client test on io options
+ * ,{
     cors: {
         origin: '*',
     }
-});
+}
+ */
+var io = require("socket.io")(socket_server);
 
 var Redis = require("ioredis");
 
